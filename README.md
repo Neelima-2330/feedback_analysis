@@ -74,16 +74,3 @@ A full-stack application for managing customer feedback with sentiment analysis,
    ```bash
    node app.js
    ```
-
-## 🙋‍♀️ Author
-
-**Neelima Donepudi**  
-[GitHub](https://github.com/Neelima-2330)
-
----
-
-## ⭐️ Show Some Love
-
-If you like this project, give it a ⭐️ and share it!
-
----
