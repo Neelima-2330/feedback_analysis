@@ -1,0 +1,85 @@
+<div class="content-wrapper">
+  <h2 class="page-heading">Products</h2>
+  <div class="page-underline"></div>
+
+  <form action="/products/add" method="POST" class="form-section">
+    <label for="name">Product Name</label>
+    <input type="text" id="name" name="name" placeholder="Enter product name" required />
+
+    <label for="category">Category</label>
+    <select name="category" id="category" required>
+      <option value="" disabled selected>Select a category</option>
+      <option value="Electronics">Electronics</option>
+      <option value="Cosmetics">Cosmetics</option>
+      <option value="Food">Food</option>
+      <option value="Clothing">Clothing</option>
+      <option value="Home Appliances">Home Appliances</option>
+      <option value="Books">Books</option>
+      <option value="Other">Other</option>
+    </select>
+
+    <label for="price">Price</label>
+    <div class="price-input-wrapper">
+      <span>$</span>
+      <input type="number" step="0.01" id="price" name="price" placeholder="Enter price" required />
+    </div>
+
+    <button type="submit">Add Product</button>
+  </form>
+
+  <h3 style="margin-top: 3rem;">Product List</h3>
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Product Name</th>
+        <th>Category</th>
+        <th>Price</th>
+        <th style="text-align: center;">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% if (products.length === 0) { %>
+        <tr><td colspan="5">No products found.</td></tr>
+      <% } else { %>
+        <% products.forEach((product, index) => { %>
+          <tr>
+            <td><%= index + 1 %></td>
+            <td><%= product.name %></td>
+            <td><%= product.category %></td>
+            <td><%= product.price %></td>
+            <td style="text-align: center;">
+              <a href="/products/edit/<%= product.product_id %>" title="Edit">
+                <i class="fas fa-pen-to-square" style="color: #4f46e5; margin-right: 10px;"></i>
+              </a>
+              <form action="/products/delete/<%= product.product_id %>" method="POST" style="display:inline;" onsubmit="return confirm('Delete this product?');">
+                <button type="submit" style="background: none; border: none; cursor: pointer;">
+                  <i class="fas fa-trash" style="color: #ef4444;"></i>
+                </button>
+              </form>
+            </td>
+          </tr>
+        <% }) %>
+      <% } %>
+    </tbody>
+  </table>
+</div>
+
+<script src="https://kit.fontawesome.com/a2e0ef6c67.js" crossorigin="anonymous"></script>
+
+<style>
+  .price-input-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .price-input-wrapper span {
+    font-size: 1rem;
+    color: #4b5563;
+  }
+
+  .price-input-wrapper input[type="number"] {
+    flex: 1;
+  }
+</style>

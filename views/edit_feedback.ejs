@@ -1,0 +1,37 @@
+<div class="content-wrapper">
+  <h2>Edit Feedback</h2>
+  <form action="/feedback/edit/<%= feedback.feedback_id %>" method="POST" class="form-section">
+    <label for="customer_id">Customer</label>
+    <select name="customer_id" id="customer_id" required>
+      <% customers.forEach(c => { %>
+        <option value="<%= c.customer_id %>" <%= c.customer_id === feedback.customer_id ? 'selected' : '' %>>
+          <%= c.name %>
+        </option>
+      <% }) %>
+    </select>
+
+    <label for="product_id">Product</label>
+    <select name="product_id" id="product_id" required>
+      <% products.forEach(p => { %>
+        <option value="<%= p.product_id %>" <%= p.product_id === feedback.product_id ? 'selected' : '' %>>
+          <%= p.name %>
+        </option>
+      <% }) %>
+    </select>
+
+    <label for="feedback_text">Feedback</label>
+    <textarea name="feedback_text" required><%= feedback.feedback_text %></textarea>
+
+    <label for="feedback_date">Date</label>
+    <input type="date" name="feedback_date" value="<%= feedback.feedback_date.toISOString().split('T')[0] %>" required>
+
+    <label for="sentiment">Sentiment</label>
+    <select name="sentiment" required>
+      <option value="Positive" <%= feedback.sentiment === 'Positive' ? 'selected' : '' %>>Positive</option>
+      <option value="Neutral" <%= feedback.sentiment === 'Neutral' ? 'selected' : '' %>>Neutral</option>
+      <option value="Negative" <%= feedback.sentiment === 'Negative' ? 'selected' : '' %>>Negative</option>
+    </select>
+
+    <button type="submit">Update Feedback</button>
+  </form>
+</div>

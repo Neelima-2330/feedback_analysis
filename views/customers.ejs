@@ -1,0 +1,76 @@
+
+
+<div class="content-wrapper">
+  <h2 class="page-heading">Customers</h2>
+  <div class="page-underline"></div>
+
+  <form action="/customers/add" method="POST" class="form-section">
+    <label for="name">Customer Name</label>
+    <input type="text" id="name" name="name" placeholder="Enter customer name" required />
+
+    <label for="email">Customer Email</label>
+    <input type="email" id="email" name="email" placeholder="Enter customer email" required />
+
+    <label for="phone">Phone Number</label>
+    <input type="text" id="phone" name="phone" placeholder="Enter phone number" required />
+
+    <label for="country">Country</label>
+    <select name="country" id="country" required>
+      <option value="" disabled selected>Select your country</option>
+      <option value="India">India</option>
+      <option value="United States">United States</option>
+      <option value="Canada">Canada</option>
+      <option value="United Kingdom">United Kingdom</option>
+      <option value="Germany">Germany</option>
+      <option value="France">France</option>
+      <option value="Australia">Australia</option>
+      <option value="Japan">Japan</option>
+      <option value="Brazil">Brazil</option>
+      <option value="South Africa">South Africa</option>
+      <option value="Other">Other</option>
+    </select>
+
+    <button type="submit">Add Customer</button>
+  </form>
+
+  <h3 style="margin-top: 3rem;">Customer List</h3>
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Phone</th>
+        <th>Country</th>
+        <th style="text-align: center;">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% if (customers.length === 0) { %>
+        <tr>
+          <td colspan="6">No customers found.</td>
+        </tr>
+      <% } else { %>
+        <% customers.forEach((customer, index) => { %>
+          <tr>
+            <td><%= index + 1 %></td>
+            <td><%= customer.name %></td>
+            <td><%= customer.email %></td>
+            <td><%= customer.phone %></td>
+            <td><%= customer.country %></td>
+            <td style="text-align: center;">
+              <a href="/customers/edit/<%= customer.customer_id %>" title="Edit">
+                <i class="fas fa-pen-to-square" style="color: #4f46e5; margin-right: 10px;"></i>
+              </a>
+              <form action="/customers/delete/<%= customer.customer_id %>" method="POST" onsubmit="return confirm('Are you sure you want to delete this customer?');" style="display:inline;">
+                <button type="submit" style="background: none; border: none; cursor: pointer;">
+                  <i class="fas fa-trash" style="color: #ef4444;"></i>
+                </button>
+              </form>
+            </td>
+          </tr>
+        <% }) %>
+      <% } %>
+    </tbody>
+  </table>
+</div>

@@ -1,0 +1,47 @@
+<div class="content-wrapper">
+  <h2>Edit Product</h2>
+  <form action="/products/edit/<%= product.product_id %>" method="POST" class="form-section">
+    <label for="name">Product Name</label>
+    <input type="text" id="name" name="name" value="<%= product.name %>" required />
+
+    <label for="category">Category</label>
+    <select name="category" id="category" required>
+      <option value="Electronics" <%= product.category === 'Electronics' ? 'selected' : '' %>>Electronics</option>
+      <option value="Cosmetics" <%= product.category === 'Cosmetics' ? 'selected' : '' %>>Cosmetics</option>
+      <option value="Food" <%= product.category === 'Food' ? 'selected' : '' %>>Food</option>
+      <option value="Clothing" <%= product.category === 'Clothing' ? 'selected' : '' %>>Clothing</option>
+      <option value="Home Appliances" <%= product.category === 'Home Appliances' ? 'selected' : '' %>>Home Appliances</option>
+      <option value="Books" <%= product.category === 'Books' ? 'selected' : '' %>>Books</option>
+      <option value="Other" <%= product.category === 'Other' ? 'selected' : '' %>>Other</option>
+    </select>
+
+    <label for="price">Price</label>
+    <div class="price-input-wrapper">
+      <span><%= product.currency %></span>
+      <input type="number" step="0.01" id="price" name="price" value="<%= product.price %>" required />
+    </div>
+
+    <label for="currency">Currency</label>
+    <input type="text" id="currency" name="currency" value="<%= product.currency %>" required />
+
+    <button type="submit">Update Product</button>
+  </form>
+</div>
+
+<style>
+  .price-input-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 1rem;
+  }
+
+  .price-input-wrapper span {
+    font-size: 1rem;
+    color: #4b5563;
+  }
+
+  .price-input-wrapper input {
+    flex: 1;
+  }
+</style>

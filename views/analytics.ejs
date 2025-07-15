@@ -1,0 +1,188 @@
+<div class="content-wrapper">
+  <h2 class="page-heading">Sentiment Analytics</h2>
+  <div class="page-underline"></div>
+
+  <!-- Sentiment Distribution -->
+  <h3>Overall Sentiment Distribution</h3>
+  <div class="chart-container">
+    <canvas id="sentimentChart"></canvas>
+  </div>
+
+  <!-- Sentiment Over Time -->
+  <h3>Sentiment Trend Over Time</h3>
+  <div class="chart-container">
+    <canvas id="sentimentOverTimeChart"></canvas>
+  </div>
+
+  <!-- Product-wise Sentiment -->
+  <h3>Product-wise Sentiment Breakdown</h3>
+  <div class="chart-container">
+    <canvas id="productSentimentChart"></canvas>
+  </div>
+
+  <!-- Country-wise Feedback -->
+  <h3>Country-wise Feedback Distribution</h3>
+  <div class="chart-container">
+    <canvas id="countryFeedbackChart"></canvas>
+  </div>
+
+  <!-- Top Customers -->
+  <h3>Top Customers by Feedback Count</h3>
+  <div class="chart-container">
+    <canvas id="topCustomersChart"></canvas>
+  </div>
+
+  <!-- Top Positive Products -->
+  <h3>Products with Most Positive Feedback</h3>
+  <div class="chart-container">
+    <canvas id="topPositiveProductsChart"></canvas>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  const sentiments = ['Positive', 'Negative', 'Neutral'];
+
+  // 1. Sentiment Pie Chart
+  const sentimentData = <%- JSON.stringify(sentimentCounts || []) %>;
+  new Chart(document.getElementById('sentimentChart'), {
+    type: 'pie',
+    data: {
+      labels: sentimentData.map(item => item.sentiment),
+      datasets: [{
+        data: sentimentData.map(item => parseInt(item.count)),
+        backgroundColor: ['#60a5fa', '#f87171', '#facc15']
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { position: 'bottom' }
+      }
+    }
+  });
+
+  // 2. Sentiment Over Time Line Chart
+  const trendRaw = <%- JSON.stringify(sentimentOverTime || []) %>;
+  const trendDates = [...new Set(trendRaw.map(item => item.feedback_date))];
+  const trendDataSets = sentiments.map(sent => ({
+    label: sent,
+    data: trendDates.map(date =>
+      trendRaw.find(d => d.feedback_date === date && d.sentiment === sent)?.count || 0
+    ),
+    borderWidth: 2,
+    tension: 0.3
+  }));
+
+  new Chart(document.getElementById('sentimentOverTimeChart'), {
+    type: 'line',
+    data: {
+      labels: trendDates,
+      datasets: trendDataSets
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { position: 'bottom' }
+      }
+    }
+  });
+
+  // 3. Product-wise Sentiment Bar Chart
+  const prodRaw = <%- JSON.stringify(productSentiment || []) %>;
+  const prodLabels = [...new Set(prodRaw.map(p => p.product))];
+  const prodDataSets = sentiments.map(sent => ({
+    label: sent,
+    data: prodLabels.map(p =>
+      prodRaw.find(d => d.product === p && d.sentiment === sent)?.count || 0
+    ),
+    backgroundColor:
+      sent === 'Positive' ? '#4ade80' :
+      sent === 'Negative' ? '#f87171' : '#facc15'
+  }));
+
+  new Chart(document.getElementById('productSentimentChart'), {
+    type: 'bar',
+    data: {
+      labels: prodLabels,
+      datasets: prodDataSets
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { position: 'bottom' }
+      },
+      scales: {
+        x: { stacked: true },
+        y: { stacked: true, beginAtZero: true }
+      }
+    }
+  });
+
+  // 4. Country-wise Feedback
+  const countryData = <%- JSON.stringify(countryDistribution || []) %>;
+  new Chart(document.getElementById('countryFeedbackChart'), {
+    type: 'bar',
+    data: {
+      labels: countryData.map(c => c.country),
+      datasets: [{
+        label: 'Feedback Count',
+        data: countryData.map(c => parseInt(c.count)),
+        backgroundColor: '#38bdf8'
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { display: false }
+      },
+      scales: {
+        y: { beginAtZero: true }
+      }
+    }
+  });
+
+  // 5. Top Customers
+  const topCust = <%- JSON.stringify(topCustomers || []) %>;
+  new Chart(document.getElementById('topCustomersChart'), {
+    type: 'bar',
+    data: {
+      labels: topCust.map(c => c.name),
+      datasets: [{
+        label: 'Feedback Count',
+        data: topCust.map(c => parseInt(c.count)),
+        backgroundColor: '#818cf8'
+      }]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true,
+      plugins: {
+        legend: { display: false }
+      },
+      scales: {
+        x: { beginAtZero: true }
+      }
+    }
+  });
+
+  // 6. Top Positive Products
+  const topPositive = <%- JSON.stringify(topPositiveProducts || []) %>;
+  new Chart(document.getElementById('topPositiveProductsChart'), {
+    type: 'doughnut',
+    data: {
+      labels: topPositive.map(p => p.name),
+      datasets: [{
+        label: 'Positive Feedback',
+        data: topPositive.map(p => parseInt(p.count)),
+        backgroundColor: ['#4ade80', '#86efac', '#bbf7d0', '#a7f3d0', '#6ee7b7']
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { position: 'bottom' }
+      }
+    }
+  });
+</script>

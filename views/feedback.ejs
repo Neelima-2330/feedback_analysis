@@ -1,0 +1,80 @@
+
+<div class="content-wrapper">
+  <h2 class="page-heading">Feedback</h2>
+  <div class="page-underline"></div>
+
+  <form action="/feedback" method="POST" class="form-section">
+  <label for="customer_id">Customer</label>
+  <select name="customer_id" id="customer_id" required>
+    <% customers.forEach(c => { %>
+      <option value="<%= c.customer_id %>"><%= c.name %></option>
+    <% }) %>
+  </select>
+
+  <label for="product_id">Product</label>
+  <select name="product_id" id="product_id" required>
+    <% products.forEach(p => { %>
+      <option value="<%= p.product_id %>"><%= p.name %></option>
+    <% }) %>
+  </select>
+
+  <label for="feedback_text">Feedback</label>
+  <textarea name="feedback_text" required></textarea>
+
+  <label for="feedback_date">Date</label>
+  <input type="date" name="feedback_date" required>
+
+  <label for="sentiment">Sentiment</label>
+  <select name="sentiment" required>
+    <option value="Positive">Positive</option>
+    <option value="Neutral">Neutral</option>
+    <option value="Negative">Negative</option>
+  </select>
+
+  <button type="submit">Submit Feedback</button>
+</form>
+
+
+  <h3>Feedback List</h3>
+  <table class="data-table">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Customer</th>
+      <th>Product</th>
+      <th>Feedback</th>
+      <th>Sentiment</th>
+      <th>Date</th>
+      <th style="text-align: center;">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% if (feedback.length === 0) { %>
+      <tr><td colspan="7">No feedback found.</td></tr>
+    <% } else { %>
+      <% feedback.forEach((fb, index) => { %>
+        <tr>
+          <td><%= index + 1 %></td>
+          <td><%= fb.customer_name %></td>
+          <td><%= fb.product_name %></td>
+          <td><%= fb.feedback_text %></td>
+          <td><%= fb.sentiment %></td>
+          <td><%= fb.feedback_date.toISOString().split('T')[0] %></td>
+          <td style="text-align: center;">
+            <a href="/feedback/edit/<%= fb.feedback_id %>" title="Edit">
+              <i class="fas fa-pen-to-square" style="color: #4f46e5; margin-right: 10px;"></i>
+            </a>
+            <form action="/feedback/delete/<%= fb.feedback_id %>" method="POST" style="display:inline;" onsubmit="return confirm('Delete this feedback?');">
+              <button type="submit" style="background: none; border: none; cursor: pointer;">
+                <i class="fas fa-trash" style="color: #ef4444;"></i>
+              </button>
+            </form>
+          </td>
+        </tr>
+      <% }) %>
+    <% } %>
+  </tbody>
+</table>
+
+</div>
+
