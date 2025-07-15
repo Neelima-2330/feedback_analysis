@@ -75,14 +75,6 @@ A full-stack application for managing customer feedback with sentiment analysis,
    node app.js
    ```
 
----
-
-## 📸 Screenshots
-
-> *(Add screenshots of your dashboard, login page, charts, etc. here)*
-
----
-
 ## 🙋‍♀️ Author
 
 **Neelima Donepudi**  
